@@ -1,15 +1,15 @@
 package migrations
 
 import (
-	"log"
+	"github.com/rs/zerolog/log"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	-bank-backend/helpers""github.com/nguyenvulong/go
+	"github.com/nguyenvulong/go-bank-backend/helpers"
+	. "github.com/nguyenvulong/go-bank-backend/interfaces"
 )
 
 func createAccounts() {
-	db := connectDB()
-
+	db := helpers.ConnectDB()
 	users := [2]User{
 		{Username: "Martin", Email: "martin@martin.com"},
 		{Username: "Michael", Email: "michael@michael.com"},
@@ -23,14 +23,14 @@ func createAccounts() {
 		account := Account{Type: "Daily Account", Name: string(users[i].Username + "'s" + " account"), Balance: uint(10000 * int(i+1)), UserID: user.ID}
 		db.Create(&account)
 	}
-	log.Println("Users created successfully!")
-	defer db.Close()
+	log.Info().Msg("Users created successfully!")
+	// defer db.Close()
 }
 
 func Migrate() {
-	db := connectDB()
+	db := helpers.ConnectDB()
 	db.AutoMigrate(&User{}, &Account{})
-	defer db.Close()
+	//defer db.Close()
 
 	createAccounts()
 }

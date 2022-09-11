@@ -2,15 +2,14 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/nguyenvulong/go-bank-backend/helpers"
 	"github.com/nguyenvulong/go-bank-backend/users"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/zerolog/log"
 )
 
 type Login struct {
@@ -49,7 +48,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 func StartApi() {
 	router := mux.NewRouter()
 	router.HandleFunc("/login", login).Methods("POST")
-	fmt.Println("App is working on port :8888")
-	log.Fatal(http.ListenAndServe(":8888", router))
+	log.Info().Msg("App is working on port :8888")
+	log.Fatal().Err(http.ListenAndServe(":8888", router)).
+	Msg("Bank Web App closed")
 
 }

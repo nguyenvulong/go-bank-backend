@@ -12,7 +12,7 @@ import (
 func Login(username string, pass string) map[string]interface{} {
 	db := helpers.ConnectDB()
 	user := &interfaces.User{}
-	if db.Where("username = ? ", username).First(&user).RecordNotFound() {
+	if err := db.Where("username = ? ", username).First(&user).Error; err != nil {
 		return map[string]interface{}{"message": "User not found"}
 	}
 
@@ -31,7 +31,7 @@ func Login(username string, pass string) map[string]interface{} {
 		Accounts: accounts,
 	}
 
-	defer db.Close()
+	// defer db.Close()
 
 	tokenContent := jwt.MapClaims{
 		"user_id": user.ID,
